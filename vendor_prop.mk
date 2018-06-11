@@ -206,6 +206,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.snap \
     camera.hal1.packagelist=com.skype.raider,com.whatsapp,com.snapchat.android,com.instagram.android
 
+# Boot
+PRODUCT_PROPERTY_OVERRIDES += \
+    sys.vendor.shutdown.waittime=500
+
 #disable UBWC for camera
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.preview.ubwc=0 \
