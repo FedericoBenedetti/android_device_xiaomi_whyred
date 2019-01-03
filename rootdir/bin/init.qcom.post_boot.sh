@@ -1998,8 +1998,8 @@ case "$target" in
 
             #Add-begin-HMI_L8866_A01-794,lijiang@longcheer.com,2018-01-20
             #Enable input boost configuration
-            #echo "0:1401600" > /sys/module/cpu_boost/parameters/input_boost_freq
-            #echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
+            echo "0:1401600" > /sys/module/cpu_boost/parameters/input_boost_freq
+            echo 60 > /sys/module/cpu_boost/parameters/input_boost_ms
             #Add-end-HMI_L8866_A01-794
             # Set Memory parameters
             configure_memory_parameters
