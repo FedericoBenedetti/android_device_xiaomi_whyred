@@ -178,10 +178,6 @@ PRODUCT_PACKAGES += \
     android.hardware.configstore@1.0-service \
     android.hardware.broadcastradio@1.0-impl
 
-# Doze
-PRODUCT_PACKAGES += \
-    XiaomiDoze
-
 # OTA Updates
 PRODUCT_PACKAGES += \
     Updates
