@@ -1,28 +1,92 @@
+on late-fs
+
+    # Boot time fs tune
+    write /sys/block/mmcblk0/queue/iostats 0
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk0/queue/nr_requests 256
+
 on boot
+    
+    # Update cpusets now that processors are up
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-7
+    write /dev/cpuset/background/cpus 0-7
 
 on enable-low-power
+    # according to Qcom this legacy value improves first launch latencies
+    # stock value is 512k
+    setprop dalvik.vm.heapminfree 2m
 
-    # Disable sched_boost after boot complete
-    write /proc/sys/kernel/sched_boost 0
+    # Setting b.L scheduler parameters
+    write /proc/sys/kernel/sched_upmigrate 96
+    write /proc/sys/kernel/sched_downmigrate 90
+    write /proc/sys/kernel/sched_group_upmigrate 140
+    write /proc/sys/kernel/sched_group_downmigrate 120
+    write /proc/sys/kernel/sched_select_prev_cpu_us 0
+    write /proc/sys/kernel/sched_freq_inc_notify 400000
+    write /proc/sys/kernel/sched_freq_dec_notify 400000
+    write /proc/sys/kernel/sched_spill_nr_run 5
+    write /proc/sys/kernel/sched_restrict_cluster_spill 1
+    write /proc/sys/kernel/sched_short_burst_ns 100000
+    write /proc/sys/kernel/sched_prefer_sync_wakee_to_waker 1
+    write /proc/sys/kernel/sched_small_wakee_task_load 20
 
-    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 80640
+    # cpuset settings
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-3,6-7
+    write /dev/cpuset/foreground/cpus 0-3,6-7
+    write /dev/cpuset/background/cpus 0-1
+    write /dev/cpuset/camera-daemon/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-3
+    write /dev/cpuset/restricted/cpus 0-3
 
+    # Little Cluster interactive settings
     write /sys/devices/system/cpu/cpu0/online 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 18000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 180000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/enable_prediction 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boost 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
+    wrote /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/fast_ramp_down 1
 
+    # Big Cluster interactive settings
     write /sys/devices/system/cpu/cpu4/online 1
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 18000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 180000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/enable_prediction 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 59000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/fast_ramp_down 1
 
+    # end boot time fs tune
+    write /sys/block/mmcblk0/queue/scheduler cfq
+    write /sys/block/mmcblk0/queue/iostats 0
+    write /sys/block/mmcblk0/queue/read_ahead_kb 128
+    write /sys/block/mmcblk0/queue/nr_requests 128
+
+    write /sys/block/mmcblk0rpmb/queue/scheduler cfq
+    write /sys/block/mmcblk0rpmb/queue/iostats 0
+    write /sys/block/mmcblk0rpmb/queue/read_ahead_kb 128
+    write /sys/block/mmcblk0rpmb/queue/nr_requests 128
+    
     write /sys/block/dm-0/queue/read_ahead_kb 128
-    write /sys/block/sda/queue/read_ahead_kb 128
-    write /sys/block/sde/queue/read_ahead_kb 128
-    write /sys/block/dm-0/queue/scheduler cfq
-    write /sys/block/sda/queue/scheduler cfq
-    write /sys/block/sde/queue/scheduler cfq
+    write /sys/block/dm-1/queue/read_ahead_kb 128
 
-    write /sys/module/msm_thermal/core_control/enabled 0
-
-    # Set nice Level to 9
-    write /proc/sys/kernel/sched_upmigrate_min_nice 9
-
+    # Lower vfs_cache_pressure
+    write /proc/sys/vm/vfs_cache_pressure 60
 
 on property:sys.boot_completed=1
     trigger enable-low-power
