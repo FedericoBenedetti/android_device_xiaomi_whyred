@@ -457,6 +457,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     init.performance.rc
 
+# QTI Performance
+PRODUCT_BOOT_JARS += \
+    QPerformance \
+    UxPerformance
+
 # Wi-Fi Display
 PRODUCT_BOOT_JARS += \
     WfdCommon
