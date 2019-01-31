@@ -83,6 +83,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.qti.sys.fw.bservice_enable=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
+    debug.sf.disable_backpressure=1 \
     debug.sf.enable_hwc_vds=1 \
     debug.sf.hw=1 \
     debug.sf.latch_unsignaled=1 \
@@ -164,8 +165,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # QTI Performance
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.enable_prefetch=1 \
-    vendor.iop.enable_uxe=1 \
-    vendor.iop.enable_prefetch_ofr=1 \
+    vendor.iop.enable_uxe=0 \
+    vendor.iop.enable_prefetch_ofr=0 \
     vendor.perf.iop_v3.enable=1 \
     ro.vendor.at_library=libqti-at.so \
     persist.vendor.qti.games.gt.prof=1
@@ -190,15 +191,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.sensors.sta_detect=true \
     ro.vendor.sensors.mot_detect=true
 
-#Expose aux camera for below packages
-PRODUCT_PROPERTY_OVERRIDES += \
-    camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,com.qualcomm.qti.qmmi \
-    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,com.qualcomm.qti.qmmi
-
-# Camera HAL Setup
+# Camera
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.HAL3.enabled=1 \
-    camera.hal1.packagelist=com.whatsapp,com.facebook.katana,com.instagram.android,com.snapchat.android 
+    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.snap
 
 #disable UBWC for camera
 PRODUCT_PROPERTY_OVERRIDES += \
