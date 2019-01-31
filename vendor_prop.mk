@@ -194,7 +194,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.HAL3.enabled=1 \
-    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.snap
+    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.snap \
+    camera.hal1.packagelist=com.skype.raider,com.whatsapp,com.snapchat.android,com.instagram.android
 
 #disable UBWC for camera
 PRODUCT_PROPERTY_OVERRIDES += \
