@@ -173,12 +173,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # QTI Performance
 PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.enable_prefetch=1 \
-    vendor.iop.enable_uxe=0 \
-    vendor.iop.enable_prefetch_ofr=0 \
-    vendor.perf.iop_v3.enable=1 \
     ro.vendor.at_library=libqti-at.so \
-    persist.vendor.qti.games.gt.prof=1
+    vendor.debug.enable.gamed=0
 
 #min/max cpu in core control
 PRODUCT_PROPERTY_OVERRIDES += \
