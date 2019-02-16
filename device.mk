@@ -28,8 +28,7 @@ $(call inherit-product, vendor/xiaomi/whyred/whyred-vendor.mk)
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
-    $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-mokee
+    $(LOCAL_PATH)/overlay 
 
 PRODUCT_ENFORCE_RRO_TARGETS := \
     framework-res
@@ -76,10 +75,6 @@ PRODUCT_COPY_FILES += \
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
-
-# Boot animation
-TARGET_SCREEN_HEIGHT := 2160
-TARGET_SCREEN_WIDTH := 1080
 
 # Alipay
 PRODUCT_PACKAGES += \
@@ -154,6 +149,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     cneapiclient \
     com.quicinc.cne
+
+# OTA Updates
+PRODUCT_PACKAGES += \
+    Updates
 
 # Display
 PRODUCT_PACKAGES += \
@@ -451,11 +450,15 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
 
-# CAF Hostapd 
+# CAF Hostapd
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/hostapd/hostapd.accept:system/etc/hostapd/hostapd.accept \
     $(LOCAL_PATH)/wifi/hostapd/hostapd.deny:system/etc/hostapd/hostapd.deny \
     $(LOCAL_PATH)/wifi/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
+
+# Init scripts
+PRODUCT_PACKAGES += \
+    init.performance.rc
 
 # Wi-Fi Display
 PRODUCT_BOOT_JARS += \

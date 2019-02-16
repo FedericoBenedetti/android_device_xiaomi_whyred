@@ -18,15 +18,14 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_n_mr1.mk)
-$(call inherit-product-if-exists, vendor/xiaomi/MiuiCamera/whyred.mk)
 
 # Inherit from whyred device
 $(call inherit-product, device/xiaomi/whyred/device.mk)
 
-# Inherit some common Mokee stuff.
-$(call inherit-product, vendor/mk/config/common_full_phone.mk)
+# Inherit some common Syberia stuff.
+$(call inherit-product, vendor/syberia/common.mk)
 
-PRODUCT_NAME := mk_whyred
+PRODUCT_NAME := syberia_whyred
 PRODUCT_BRAND := Xiaomi
 PRODUCT_DEVICE := whyred
 PRODUCT_MANUFACTURER := Xiaomi
@@ -37,7 +36,12 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 PRODUCT_BUILD_PROP_OVERRIDES += \
     TARGET_DEVICE="whyred" \
     PRODUCT_NAME="whyred" \
-    BUILD_FINGERPRINT="xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.2.2.0.OEICNXM:user/release-keys" \
-    PRIVATE_BUILD_DESC="whyred-user 8.1.0 OPM1.171019.011 V10.2.2.0.OEICNXM release-keys"
+    PRIVATE_BUILD_DESC="whyred-user 8.1.0 OPM1.171019.011 V9.5.11.0.OEIMIFA release-keys"
+
+BUILD_FINGERPRINT := xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V9.5.11.0.OEIMIFA:user/release-keys
 
 TARGET_VENDOR := Xiaomi
+
+TARGET_BOOT_ANIMATION_RES := 2160
+
+SYBERIA_BUILD_TYPE := OFFICIAL

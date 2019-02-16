@@ -182,10 +182,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.sensors.sta_detect=true \
     ro.vendor.sensors.mot_detect=true
 
-#Expose aux camera for below packages
+# Camera
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,com.qualcomm.qti.qmmi \
-    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,com.qualcomm.qti.qmmi
+	persist.camera.HAL3.enabled=1 \
+    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.snap \
+    vendor.camera.hal1.packagelist=com.skype.raider,com.whatsapp,com.snapchat.android,com.instagram.android
 
 #disable UBWC for camera
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -348,7 +349,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 #Ignore the wrong IWLAN report when UE in W/G mode.
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.data_con_rprt=1
-
-# Maintainer
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.mk.maintainer=guaiyihu
