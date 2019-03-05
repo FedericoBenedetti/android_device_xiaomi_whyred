@@ -182,12 +182,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.sensors.sta_detect=true \
     ro.vendor.sensors.mot_detect=true
 
-# Camera
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.camera.HAL3.enabled=1 \
-    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,org.lineageos.snap \
-    vendor.camera.hal1.packagelist=com.skype.raider,com.whatsapp,com.snapchat.android,com.instagram.android
-
 #disable UBWC for camera
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.preview.ubwc=0 \
