@@ -1,20 +1,13 @@
-on late-fs
-    # boot time fs tune
-    write /sys/block/mmcblk0/queue/iostats 0
-    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
-    write /sys/block/mmcblk0/queue/nr_requests 256
-
 on boot
-    # update cpusets now that processors are up
+    # Update cpusets now that processors are up
     write /dev/cpuset/top-app/cpus 0-7
     write /dev/cpuset/foreground/cpus 0-7
     write /dev/cpuset/foreground/boost/cpus 0-7
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
 
-on property:sys.boot_completed=1
-
-    # according to Qcom this legacy value improves first launch latencies
+on property:vendor.post_boot.parsed=1
+    # According to Qcom this legacy value improves first launch latencies
     # stock value is 512k
     setprop dalvik.vm.heapminfree 2m
 
@@ -32,69 +25,28 @@ on property:sys.boot_completed=1
     write /proc/sys/kernel/sched_prefer_sync_wakee_to_waker 1
     write /proc/sys/kernel/sched_small_wakee_task_load 20
 
-    # configure governor settings for little cluster
-    write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay "19000 1401600:39000 1747200:99000"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 97
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1401600
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "85 1113600:26 1401600:90 1536000:14 1747200:98"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 18000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 180000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 0
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/enable_prediction 0
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration 0
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boost 0
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 0
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/fast_ramp_down 1
-    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-
-    # configure governor settings for big cluster
-    write /sys/devices/system/cpu/cpu4/online 1
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 97
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1401600
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "19000 1401600:39000 1958400:99000"
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "85 1401600:90 1536000:14 2150400:98"
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 18000
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 180000
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 1
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 0
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/enable_prediction 0
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif 1
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 59000
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/fast_ramp_down 1
-    chown system /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
-    chown system /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
-    chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
-    chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+    # Cpuset Settings
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-3,6-7
+    write /dev/cpuset/foreground/cpus 0-3,6-7
+    write /dev/cpuset/background/cpus 0-1
+    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/system-background/cpus 0-3
+    write /dev/cpuset/restricted/cpus 0-3
 
     # Enable PEWQ
     write /sys/module/workqueue/parameters/power_efficient Y
 
-    # Setup post-boot cpusets
-    write /dev/cpuset/top-app/cpus 0-7
-    write /dev/cpuset/foreground/cpus 0-3,6-7
-    write /dev/cpuset/background/cpus 0-1
-    write /dev/cpuset/system-background/cpus 0-3
-    write /dev/cpuset/camera-daemon/cpus 0-7
-    write /dev/cpuset/restricted/cpus 0-3
-    write /dev/cpuset/kernel/cpus 2,3
-    write /dev/cpuset/system/performance/cpus 6-7
-    write /dev/cpuset/system/background/cpus 0-1
-    write /dev/cpuset/system/cpus 0-1,6-7
-    write /dev/cpuset/application/performance/cpus 4-5
-    write /dev/cpuset/application/background/cpus 0-1
-    write /dev/cpuset/application/cpus 0-1,4-5
+    # End boot time FS tune
+    write /sys/block/mmcblk0/queue/scheduler bfq
+    write /sys/block/mmcblk0/queue/iostats 0
+    write /sys/block/mmcblk0/queue/read_ahead_kb 128
+    write /sys/block/mmcblk0/queue/nr_requests 128
+
+    write /sys/block/mmcblk0rpmb/queue/scheduler bfq
+    write /sys/block/mmcblk0rpmb/queue/iostats 0
+    write /sys/block/mmcblk0rpmb/queue/read_ahead_kb 128
+    write /sys/block/mmcblk0rpmb/queue/nr_requests 128
 
     # Setup dirty ratios
     write /proc/sys/vm/dirty_ratio 5
@@ -103,7 +55,7 @@ on property:sys.boot_completed=1
     # Lower vfs_cache_pressure
     write /proc/sys/vm/vfs_cache_pressure 60
 
-    # bring all cores online
+    # Bring all cores online
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu2/online 1
